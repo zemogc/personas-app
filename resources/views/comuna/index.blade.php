@@ -14,8 +14,8 @@
 <body>
 <div class="container">
     <h1>Listado de Comunas</h1>
-
-    <table class="table">
+    <a href="{{route('comunas.create')}}" class="btn btn-success">Crear Comuna</a>
+  <table class="table">
   <thead>
     <tr>
       <th scope="col">Código</th>
