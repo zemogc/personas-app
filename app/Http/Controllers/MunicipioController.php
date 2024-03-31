@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Municipio; // Importar el modelo Municipio
 
-class municipio extends Controller
+class MunicipioController extends Controller
 {
     public function index()
     {
