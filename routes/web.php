@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ComunaController;
-use App\Http\Controllers\municipio; // Importo nuevo controlador
+use App\Http\Controllers\MunicipioController; // Importar correctamente el controlador MunicipioController
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,7 +16,7 @@ Route::delete('/comunas/{comuna}', [ComunaController::class, 'destroy'])->name('
 Route::put('/comunas/{comuna}', [ComunaController::class, 'update'])->name('comunas.update');
 Route::get('/comunas/{comuna}/edit', [ComunaController::class, 'edit'])->name('comunas.edit');
 
-// rutas de municipios
+// Rutas de municipios
 Route::get('/municipios', [MunicipioController::class, 'index'])->name('municipios.index');
 Route::post('/municipios', [MunicipioController::class, 'store'])->name('municipios.store');
 Route::get('/municipios/create', [MunicipioController::class, 'create'])->name('municipios.create');
