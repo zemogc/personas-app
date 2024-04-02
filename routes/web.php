@@ -31,7 +31,7 @@ Route::get('/departamentos', [DepartamentoController::class, 'index'])->name('de
 Route::post('/departamentos', [DepartamentoController::class, 'store'])->name('departamentos.store');
 Route::get('/departamentos/create', [DepartamentoController::class, 'create'])->name('departamentos.create');
 Route::delete('/departamentos/{departamento}', [DepartamentoController::class, 'destroy'])->name('departamentos.destroy'); //ruta ya configurada pasa a prueba
-Route::put('/departamentos/{departamento}', [DepartamentoController::class, 'update'])->name('departamentos.update');
-Route::get('/departamentos/{departamento}/edit', [DepartamentoController::class, 'edit'])->name('departamentos.edit');
+Route::put('/departamentos/{departamento}', [DepartamentoController::class, 'update'])->name('departamentos.update'); //Ruta despues del edit Ok
+Route::get('/departamentos/{departamento}/edit', [DepartamentoController::class, 'edit'])->name('departamentos.edit'); //ruta configurada previamente esta Okk
 
 
