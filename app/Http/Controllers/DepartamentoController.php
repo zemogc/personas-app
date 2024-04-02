@@ -20,17 +20,19 @@ class DepartamentoController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'depa_nomb' => 'required|string|max:255',
-            'pais_codi' => 'required|exists:paises,pais_codi'
-        ]);
+       // Validación
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'country_code' => 'required|string|max:255', 
+    ]);
 
-        Departamento::create([
-            'depa_nomb' => $request->depa_nomb,
-            'pais_codi' => $request->pais_codi
-        ]);
+    // Crearenbd
+    Departamento::create([
+        'depa_nomb' => $request->name,
+        'pais_codi' => $request->country_code,
+    ]);
 
-        return redirect()->route('departamentos.index')->with('success', 'Departamento creado correctamente');
+    return redirect()->route('departamentos.index')->with('success', 'Departamento creado correctamente');
     }
 
     public function edit(Departamento $departamento)
