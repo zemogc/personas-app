@@ -56,12 +56,27 @@ class MunicipioController extends Controller
 
     public function update(Request $request, Municipio $municipio)
     {
-        // Validación y actualización de un municipio existente
+        // configuo la actualizacion ya que va de la mano con el edit de arriba
+        // datos y vaidaciones
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|exists:tb_municipio,muni_codi'
+        ]);
+
+        // actualizacion
+        $municipio->update([
+            'muni_nomb' => $request->name,
+            'muni_codi' => $request->code
+        ]);
+
+        // mensaje de aactualizado con éxito
+        return redirect()->route('municipios.index')->with('success', 'Municipio actualizado correctamente');
+    
     }
 
     public function destroy(Municipio $municipio)
     {
-  // Verificar si el municipio existe
+  // Verificar si el municipio existe en bd
   if ($municipio) {
     // Eliminar el municipio de la base de datos
     $municipio->delete();
