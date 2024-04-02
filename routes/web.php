@@ -34,4 +34,12 @@ Route::delete('/departamentos/{departamento}', [DepartamentoController::class, '
 Route::put('/departamentos/{departamento}', [DepartamentoController::class, 'update'])->name('departamentos.update'); //Ruta despues del edit Ok
 Route::get('/departamentos/{departamento}/edit', [DepartamentoController::class, 'edit'])->name('departamentos.edit'); //ruta configurada previamente esta Okk
 
+// Rutas de paises
+Route::get('/paises', [PaisController::class, 'index'])->name('paises.index');
+Route::get('/paises/create', [PaisController::class, 'create'])->name('paises.create');
+Route::post('/paises', [PaisController::class, 'store'])->name('paises.store');
+Route::get('/paises/{pais}/edit', [PaisController::class, 'edit'])->name('paises.edit');
+Route::put('/paises/{pais}', [PaisController::class, 'update'])->name('paises.update');
+Route::delete('/paises/{pais}', [PaisController::class, 'destroy'])->name('paises.destroy');
+
 

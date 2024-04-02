@@ -23,7 +23,7 @@ class PaisController extends Controller
      */
     public function create()
     {
-        //
+        return view('paises.new');
     }
 
     /**
@@ -34,7 +34,15 @@ class PaisController extends Controller
      */
     public function store(Request $request)
     {
-        //
+          // Validar los datos del formulario
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+    ]);
+
+    Pais::create([
+        'nombre' => $request->nombre,
+    ]);
+    return redirect()->route('paises.index')->with('success', 'País creado correctamente');
     }
 
     /**
