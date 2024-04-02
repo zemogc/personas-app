@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Municipio; // Importar el modelo Municipio
 
+
 class MunicipioController extends Controller
 {
     public function index()
@@ -15,6 +16,8 @@ class MunicipioController extends Controller
 
     public function create()
     {
+       
+        $municipios = Municipio::all();
         return view('municipios.new', compact('municipios'));
     }
 
@@ -58,6 +61,16 @@ class MunicipioController extends Controller
 
     public function destroy(Municipio $municipio)
     {
-        // Eliminación de un municipio existente
+  // Verificar si el municipio existe
+  if ($municipio) {
+    // Eliminar el municipio de la base de datos
+    $municipio->delete();
+
+    // Redirigir de vuelta a la vista index con un mensaje de éxito
+    return redirect()->route('municipios.index')->with('success', 'Municipio eliminado correctamente');
+} else {
+    // Si el municipio no existe, redirigir con un mensaje de error
+    return redirect()->route('municipios.index')->with('error', 'El municipio no existe o ya ha sido eliminado');
+}
     }
 }
