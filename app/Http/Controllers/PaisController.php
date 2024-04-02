@@ -62,9 +62,10 @@ class PaisController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Pais $pais)
     {
-        //
+        return view('paises.edit', compact('pais'));
+
     }
 
     /**
@@ -76,7 +77,15 @@ class PaisController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+    ]);
+
+    $pais->update([
+        'nombre' => $request->nombre,
+    ]);
+
+    return redirect()->route('paises.index')->with('success', 'País actualizado correctamente');
     }
 
     /**
