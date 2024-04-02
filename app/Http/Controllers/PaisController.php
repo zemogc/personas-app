@@ -96,6 +96,8 @@ class PaisController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $pais->delete();
+
+    return redirect()->route('paises.index')->with('success', 'País eliminado correctamente');
     }
 }
