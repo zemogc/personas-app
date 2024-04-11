@@ -15,6 +15,7 @@
                 <tr>
                     <th scope="col">Código</th>
                     <th scope="col">País</th>
+                    <th scope="col">Capital</th> 
                     <th scope="col">Acción</th>
                 </tr>
             </thead>
@@ -23,6 +24,7 @@
                 <tr>
                     <th scope="row">{{ $pais->pais_codi }}</th>
                     <td>{{ $pais->pais_nomb }}</td>
+                    <td>{{ $pais->pais_capi }}</td> 
                     <td>
                         <a href="{{ route('paises.edit', ['pais'=>$pais->pais_codi]) }}" class="btn btn-info">Editar</a>
                         <form action="{{ route('paises.destroy', ['pais' => $pais->pais_codi]) }}" method="POST" style="display: inline-block">
