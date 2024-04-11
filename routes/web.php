@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ComunaController;
+use App\Http\Controllers\PaisController;
 use App\Http\Controllers\MunicipioController; // Importar correctamente el controlador MunicipioController
 use App\Http\Controllers\DepartamentoController; //por el comentario de arriba ya tengo claro que aqui defino esta parte para cada entidad
 
