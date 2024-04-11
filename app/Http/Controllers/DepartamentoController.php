@@ -44,16 +44,17 @@ class DepartamentoController extends Controller
     {
         $request->validate([
             'depa_nomb' => 'required|string|max:255',
-            'pais_codi' => 'required|exists:paises,pais_codi'
+            'pais_codi' => 'required|exists:tb_pais,pais_codi'
         ]);
-
+    
         $departamento->update([
             'depa_nomb' => $request->depa_nomb,
             'pais_codi' => $request->pais_codi
         ]);
-
+    
         return redirect()->route('departamentos.index')->with('success', 'Departamento actualizado correctamente');
     }
+    
 
     public function destroy(Departamento $departamento)
     {

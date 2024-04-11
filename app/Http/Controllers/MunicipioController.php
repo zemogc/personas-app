@@ -23,25 +23,19 @@ class MunicipioController extends Controller
 
     public function store(Request $request)
     {
-        // Validación y almacenamiento de un nuevo municipio es decir la creacion
-         // Validación de los datos del formulario
-         $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|exists:tb_municipio,muni_codi'
+            'muni_codi' => 'required|exists:tb_municipio,muni_codi'
         ]);
-
-        // Crear una nueva instancia de Municipio con los datos del formulario
+        
         $municipio = new Municipio();
         $municipio->muni_nomb = $request->name;
-        $municipio->muni_codi = $request->code;
-        $municipio->depa_codi = 10;
+        $municipio->muni_codi = $request->muni_codi;
+        $municipio->depa_codi = 10; 
         
-        // Guardar el nuevo municipio en la base de datos
         $municipio->save();
-
-        // Redirigir a la vista index con un mensaje de éxito
-        return redirect()->route('municipios.index')->with('success', 'Municipio creado correctamente');
     
+        return redirect()->route('municipios.index')->with('success', 'Municipio creado correctamente');
     }
 
     public function show(Municipio $municipio)
