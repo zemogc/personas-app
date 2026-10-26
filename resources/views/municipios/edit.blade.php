@@ -1,0 +1,20 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Editar municipio
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 max-w-xl">
+                <form method="POST" action="{{ route('municipios.update', $municipio) }}" class="space-y-6">
+                    @csrf
+                    @method('PUT')
+
+                    @include('municipios._form', ['municipio' => $municipio])
+                </form>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
