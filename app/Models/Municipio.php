@@ -10,7 +10,9 @@ class Municipio extends Model
     use HasFactory;
 
     protected $table = 'tb_municipio';
+
     protected $primaryKey = 'muni_codi';
+
     public $timestamps = false;
 
     protected $fillable = ['muni_nomb', 'depa_codi'];

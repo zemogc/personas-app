@@ -10,7 +10,9 @@ class Comuna extends Model
     use HasFactory;
 
     protected $table = 'tb_comuna';
+
     protected $primaryKey = 'comu_codi';
+
     public $timestamps = false;
 
     protected $fillable = ['comu_nomb', 'muni_codi'];
