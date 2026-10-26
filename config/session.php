@@ -198,4 +198,18 @@ return [
 
     'same_site' => 'lax',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Session Serialization
+    |--------------------------------------------------------------------------
+    |
+    | "json" evita deserializar objetos PHP arbitrarios desde la sesión.
+    | Cambiar este valor invalida las sesiones activas.
+    |
+    | Supported: "json", "php"
+    |
+    */
+
+    'serialization' => 'json',
+
 ];
