@@ -2,57 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Pais; //modelo pais imporss
+use App\Http\Requests\PaisRequest;
+use App\Models\Municipio;
+use App\Models\Pais;
 
 class PaisController extends Controller
 {
     public function index()
     {
-        $paises = Pais::all();
+        $paises = Pais::with('capital')->orderBy('pais_nomb')->get();
+
         return view('paises.index', compact('paises'));
     }
 
     public function create()
     {
-        return view('paises.new');
+        return view('paises.new', ['municipios' => $this->municipios()]);
     }
 
-    public function store(Request $request)
+    public function store(PaisRequest $request)
     {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-        ]);
+        Pais::create($request->validated());
 
-        Pais::create([
-            'nombre' => $request->nombre,
-        ]);
-
-        return redirect()->route('paises.index')->with('success', 'País creado correctamente');
+        return redirect()->route('paises.index')->with('success', 'País creado correctamente.');
     }
 
     public function edit(Pais $pais)
     {
-        return view('paises.edit', compact('pais'));
+        return view('paises.edit', ['pais' => $pais, 'municipios' => $this->municipios()]);
     }
 
-    public function update(Request $request, Pais $pais)
+    public function update(PaisRequest $request, Pais $pais)
     {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-        ]);
+        $pais->update($request->validated());
 
-        $pais->update([
-            'nombre' => $request->nombre,
-        ]);
-
-        return redirect()->route('paises.index')->with('success', 'País actualizado correctamente');
+        return redirect()->route('paises.index')->with('success', 'País actualizado correctamente.');
     }
 
     public function destroy(Pais $pais)
     {
+        if ($pais->departamentos()->exists()) {
+            return redirect()->route('paises.index')
+                ->with('error', 'No se puede eliminar el país porque tiene departamentos asociados.');
+        }
+
         $pais->delete();
 
-        return redirect()->route('paises.index')->with('success', 'País eliminado correctamente');
+        return redirect()->route('paises.index')->with('success', 'País eliminado correctamente.');
+    }
+
+    private function municipios()
+    {
+        return Municipio::orderBy('muni_nomb')->get();
     }
 }
