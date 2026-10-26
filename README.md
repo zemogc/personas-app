@@ -48,7 +48,7 @@ erDiagram
 
 | Capa | Tecnología |
 |---|---|
-| Backend | PHP 8.1+, Laravel 9 |
+| Backend | PHP 8.3+, Laravel 13 |
 | Autenticación | Laravel Breeze (Blade) |
 | Frontend | Blade, Tailwind CSS, Alpine.js, Vite |
 | Base de datos | MySQL (desarrollo) · SQLite en memoria (tests) |
@@ -56,7 +56,7 @@ erDiagram
 
 ## Requisitos
 
-- PHP **8.1** o superior con las extensiones `pdo_mysql` y `pdo_sqlite`
+- PHP **8.3** o superior con las extensiones `pdo_mysql` y `pdo_sqlite`
 - Composer 2
 - Node.js **20.19** o superior
 - MySQL 8 (o MariaDB)
@@ -126,7 +126,7 @@ tests/Feature/Geografia/    Tests del CRUD (CrudConPadreTestCase + un test por r
 
 ## Pendientes conocidos
 
-- **Migrar a una versión de Laravel con soporte.** Laravel 9 dejó de recibir parches de seguridad y `composer audit` reporta avisos en `laravel/framework` que no tienen corrección en la rama 9.x.
+- Adoptar la estructura simplificada de Laravel 11+ (`bootstrap/app.php` con `withRouting`/`withMiddleware`). Hoy se conserva la estructura clásica (`Http/Kernel`, providers en `config/app.php`), que Laravel sigue soportando.
 - Paginación y búsqueda en los listados.
 - Autorización por roles: hoy cualquier usuario autenticado puede modificar los catálogos.
 
