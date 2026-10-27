@@ -1,22 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear País</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <h1>Crear País</h1>
-        <form method="POST" action="{{ route('paises.store') }}">
-            @csrf
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre del País</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del país">
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Nuevo país
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 max-w-xl">
+                <form method="POST" action="{{ route('paises.store') }}" class="space-y-6">
+                    @csrf
+
+                    @include('paises._form', ['pais' => null])
+                </form>
             </div>
-            <button type="submit" class="btn btn-primary">Guardar</button>
-        </form>
+        </div>
     </div>
-</body>
-</html>
+</x-app-layout>

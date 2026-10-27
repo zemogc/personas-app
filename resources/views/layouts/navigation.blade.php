@@ -15,6 +15,11 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @foreach (config('geografia.menu') as $route => $label)
+                        <x-nav-link :href="route($route.'.index')" :active="request()->routeIs($route.'.*')">
+                            {{ $label }}
+                        </x-nav-link>
+                    @endforeach
                 </div>
             </div>
 
@@ -70,6 +75,11 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @foreach (config('geografia.menu') as $route => $label)
+                <x-responsive-nav-link :href="route($route.'.index')" :active="request()->routeIs($route.'.*')">
+                    {{ $label }}
+                </x-responsive-nav-link>
+            @endforeach
         </div>
 
         <!-- Responsive Settings Options -->
