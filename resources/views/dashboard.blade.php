@@ -16,10 +16,10 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="grid grid-cols-2 gap-4 px-4 sm:px-0 lg:grid-cols-4">
                 @foreach (config('geografia.menu') as $ruta => $etiqueta)
                     <a href="{{ route($ruta.'.index') }}"
-                       class="group bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 transition hover:shadow-md hover:ring-1 hover:ring-indigo-200">
+                       class="group bg-white overflow-hidden shadow-sm rounded-lg p-4 sm:p-6 transition hover:shadow-md hover:ring-1 hover:ring-indigo-200">
                         <p class="text-sm font-medium text-gray-500">{{ $etiqueta }}</p>
                         <p class="mt-2 text-3xl font-semibold text-gray-900">{{ number_format($totales[$ruta], 0, ',', '.') }}</p>
                         <p class="mt-4 text-sm text-indigo-600 group-hover:text-indigo-800">Ver listado &rarr;</p>
