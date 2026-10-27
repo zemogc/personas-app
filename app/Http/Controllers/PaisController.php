@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PaisRequest;
 use App\Models\Municipio;
 use App\Models\Pais;
+use Illuminate\Http\Request;
 
 class PaisController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $paises = Pais::with('capital')->orderBy('pais_nomb')->get();
+        $paises = Pais::with('capital')
+            ->buscar($request->query('q'))
+            ->orderBy('pais_nomb')
+            ->paginate(config('geografia.por_pagina'))
+            ->withQueryString();
 
         return view('paises.index', compact('paises'));
     }

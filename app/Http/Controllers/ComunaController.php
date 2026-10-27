@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ComunaRequest;
 use App\Models\Comuna;
 use App\Models\Municipio;
+use Illuminate\Http\Request;
 
 class ComunaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $comunas = Comuna::with('municipio')->orderBy('comu_nomb')->get();
+        $comunas = Comuna::with('municipio')
+            ->buscar($request->query('q'))
+            ->orderBy('comu_nomb')
+            ->paginate(config('geografia.por_pagina'))
+            ->withQueryString();
 
         return view('comunas.index', compact('comunas'));
     }
