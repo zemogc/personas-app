@@ -19,7 +19,9 @@ class DatabaseSeederTest extends TestCase
         $colombia = Pais::with('capital', 'departamentos.municipios')->findOrFail('COL');
 
         $this->assertSame('Bogotá', $colombia->capital->muni_nomb);
-        $this->assertCount(4, $colombia->departamentos);
-        $this->assertTrue(Comuna::whereHas('municipio', fn ($q) => $q->where('muni_nomb', 'Cali'))->exists());
+        $this->assertCount(5, $colombia->departamentos);
+        $this->assertCount(42, $colombia->departamentos->firstWhere('depa_nomb', 'Valle del Cauca')->municipios);
+        $this->assertSame(22, Comuna::whereHas('municipio', fn ($q) => $q->where('muni_nomb', 'Cali'))->count());
+        $this->assertSame(6, Pais::count());
     }
 }

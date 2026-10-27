@@ -11,7 +11,7 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <x-search-form :action="route('municipios.index')" placeholder="Buscar por municipio o departamento" />
+                    <x-search-form :action="route('municipios.index')" placeholder="Municipio o departamento" />
 
                     @can('gestionar-geografia')
                         <a href="{{ route('municipios.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
