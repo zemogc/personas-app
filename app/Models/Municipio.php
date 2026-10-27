@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Buscable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Municipio extends Model
 {
-    use HasFactory;
+    use Buscable, HasFactory;
 
     protected $table = 'tb_municipio';
 
     protected $primaryKey = 'muni_codi';
 
     public $timestamps = false;
+
+    /** @var string[] Columnas usadas por el scope buscar(). */
+    protected array $buscable = ['muni_nomb', 'departamento.depa_nomb'];
 
     protected $fillable = ['muni_nomb', 'depa_codi'];
 

@@ -30,6 +30,29 @@ class PaisTest extends TestCase
             ->assertSeeInOrder(['Colombia', 'Bogotá']);
     }
 
+    public function test_busca_por_nombre_o_codigo()
+    {
+        Pais::factory()->create(['pais_codi' => 'COL', 'pais_nomb' => 'Colombia']);
+        Pais::factory()->create(['pais_codi' => 'PER', 'pais_nomb' => 'Perú']);
+
+        $this->get(route('paises.index', ['q' => 'colom']))
+            ->assertViewHas('paises', fn ($pagina) => $pagina->pluck('pais_codi')->all() === ['COL']);
+
+        $this->get(route('paises.index', ['q' => 'per']))
+            ->assertViewHas('paises', fn ($pagina) => $pagina->pluck('pais_codi')->all() === ['PER']);
+    }
+
+    public function test_pagina_el_listado_con_textos_en_espanol()
+    {
+        config(['geografia.por_pagina' => 2]);
+        Pais::factory()->count(3)->create();
+
+        $this->get(route('paises.index'))
+            ->assertViewHas('paises', fn ($pagina) => $pagina->lastPage() === 2)
+            ->assertSee('Mostrando')
+            ->assertSee('Siguiente');
+    }
+
     public function test_muestra_los_formularios()
     {
         $pais = Pais::factory()->create();

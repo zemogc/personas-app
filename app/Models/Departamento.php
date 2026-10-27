@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Buscable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Departamento extends Model
 {
-    use HasFactory;
+    use Buscable, HasFactory;
 
     protected $table = 'tb_departamento';
 
     protected $primaryKey = 'depa_codi';
 
     public $timestamps = false;
+
+    /** @var string[] Columnas usadas por el scope buscar(). */
+    protected array $buscable = ['depa_nomb', 'pais.pais_nomb'];
 
     protected $fillable = ['depa_nomb', 'pais_codi'];
 
