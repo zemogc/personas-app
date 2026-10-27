@@ -101,6 +101,8 @@ Abre <http://localhost:8000> e inicia sesión con uno de los usuarios de ejemplo
 | `php artisan usuario:rol <correo> admin` | Convierte a un usuario en administrador (`lector` para revertirlo) |
 | `npm run dev` | Servidor de Vite con recarga en caliente |
 
+La ruta `GET /up` responde 200 cuando la aplicación está sana (útil para monitoreo y balanceadores).
+
 ## Estructura relevante
 
 ```
@@ -109,7 +111,8 @@ app/
 │   ├── Controllers/        PaisController, DepartamentoController, MunicipioController, ComunaController
 │   └── Requests/           GeografiaRequest (mensajes comunes) y un Form Request por recurso
 └── Models/                 Pais, Departamento, Municipio, Comuna (con sus relaciones)
-config/geografia.php        Recursos que aparecen en el menú de navegación
+bootstrap/app.php           Rutas, middleware y excepciones (estructura de Laravel 11+)
+config/geografia.php        Menú de navegación y registros por página
 database/
 ├── factories/              Factories de cada modelo
 ├── migrations/             Esquema tb_pais, tb_departamento, tb_municipio, tb_comuna
@@ -126,10 +129,6 @@ tests/Feature/Geografia/    Tests del CRUD (CrudConPadreTestCase + un test por r
 - **Commits**: [Conventional Commits](https://www.conventionalcommits.org/es/) en español (`feat:`, `fix:`, `test:`, `docs:`, `chore:`, `build:`, `style:`).
 - **Pull requests**: un cambio coherente por PR, que explique el problema, la solución y cómo se verificó.
 - Antes de abrir un PR, `composer lint` y `composer test` deben pasar.
-
-## Pendientes conocidos
-
-- Adoptar la estructura simplificada de Laravel 11+ (`bootstrap/app.php` con `withRouting`/`withMiddleware`). Hoy se conserva la estructura clásica (`Http/Kernel`, providers en `config/app.php`), que Laravel sigue soportando.
 
 ## Licencia
 
