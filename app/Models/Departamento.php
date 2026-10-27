@@ -10,7 +10,9 @@ class Departamento extends Model
     use HasFactory;
 
     protected $table = 'tb_departamento';
+
     protected $primaryKey = 'depa_codi';
+
     public $timestamps = false;
 
     protected $fillable = ['depa_nomb', 'pais_codi'];

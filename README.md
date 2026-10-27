@@ -1,64 +1,135 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Personas App
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplicación web en **Laravel** para administrar la división geográfica de un país:
+**países → departamentos → municipios → comunas**, con autenticación de usuarios.
 
-## About Laravel
+Proyecto académico desarrollado como práctica de Laravel (MVC, Eloquent, Blade y Breeze).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Funcionalidades
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Registro, inicio de sesión, verificación de correo y perfil de usuario (Laravel Breeze).
+- CRUD completo de países, departamentos, municipios y comunas, disponible solo para usuarios autenticados.
+- Validación con Form Requests y mensajes en español.
+- Integridad referencial: no se puede eliminar un registro que tiene dependientes (p. ej. un país con departamentos).
+- Datos de ejemplo de Colombia listos para usar.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Modelo de datos
 
-## Learning Laravel
+```mermaid
+erDiagram
+    tb_pais ||--o{ tb_departamento : tiene
+    tb_departamento ||--o{ tb_municipio : tiene
+    tb_municipio ||--o{ tb_comuna : tiene
+    tb_pais |o--o| tb_municipio : "capital (pais_capi)"
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    tb_pais {
+        varchar(3) pais_codi PK "código ISO, p. ej. COL"
+        varchar(50) pais_nomb
+        int pais_capi "municipio capital (opcional)"
+    }
+    tb_departamento {
+        int depa_codi PK
+        varchar(50) depa_nomb
+        varchar(3) pais_codi FK
+    }
+    tb_municipio {
+        int muni_codi PK
+        varchar(50) muni_nomb
+        int depa_codi FK
+    }
+    tb_comuna {
+        int comu_codi PK
+        varchar(50) comu_nomb
+        int muni_codi FK
+    }
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Stack
 
-## Laravel Sponsors
+| Capa | Tecnología |
+|---|---|
+| Backend | PHP 8.1+, Laravel 9 |
+| Autenticación | Laravel Breeze (Blade) |
+| Frontend | Blade, Tailwind CSS, Alpine.js, Vite |
+| Base de datos | MySQL (desarrollo) · SQLite en memoria (tests) |
+| Calidad | PHPUnit, Laravel Pint |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Requisitos
 
-### Premium Partners
+- PHP **8.1** o superior con las extensiones `pdo_mysql` y `pdo_sqlite`
+- Composer 2
+- Node.js **20.19** o superior
+- MySQL 8 (o MariaDB)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## Instalación
 
-## Contributing
+```bash
+git clone https://github.com/zemogc/personas-app.git
+cd personas-app
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+composer install
+npm install
 
-## Code of Conduct
+cp .env.example .env
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Configura la conexión en `.env` (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) y crea la base de datos. Después:
 
-## Security Vulnerabilities
+```bash
+php artisan migrate --seed   # tablas + datos de ejemplo
+npm run build                # o `npm run dev` mientras desarrollas
+php artisan serve
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Abre <http://localhost:8000> e inicia sesión con el usuario de ejemplo:
 
-## License
+| Correo | Contraseña |
+|---|---|
+| `demo@example.com` | `password` |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Comandos útiles
+
+| Comando | Descripción |
+|---|---|
+| `composer test` | Ejecuta la suite de PHPUnit (SQLite en memoria, no requiere MySQL) |
+| `composer lint` | Revisa el estilo de código con Pint sin modificar archivos |
+| `composer format` | Corrige el estilo de código con Pint |
+| `php artisan migrate:fresh --seed` | Reconstruye la base de datos con los datos de ejemplo |
+| `npm run dev` | Servidor de Vite con recarga en caliente |
+
+## Estructura relevante
+
+```
+app/
+├── Http/
+│   ├── Controllers/        PaisController, DepartamentoController, MunicipioController, ComunaController
+│   └── Requests/           GeografiaRequest (mensajes comunes) y un Form Request por recurso
+└── Models/                 Pais, Departamento, Municipio, Comuna (con sus relaciones)
+config/geografia.php        Recursos que aparecen en el menú de navegación
+database/
+├── factories/              Factories de cada modelo
+├── migrations/             Esquema tb_pais, tb_departamento, tb_municipio, tb_comuna
+└── seeders/                GeografiaSeeder (datos de Colombia) y usuario demo
+resources/views/
+├── components/             flash, select-input y componentes de Breeze
+└── {paises,departamentos,municipios,comunas}/   index, new, edit y _form compartido
+tests/Feature/Geografia/    Tests del CRUD (CrudConPadreTestCase + un test por recurso)
+```
+
+## Flujo de trabajo
+
+- **Ramas**: `tipo/descripcion-corta` (p. ej. `feat/busqueda-municipios`, `fix/validacion-pais`).
+- **Commits**: [Conventional Commits](https://www.conventionalcommits.org/es/) en español (`feat:`, `fix:`, `test:`, `docs:`, `chore:`, `build:`, `style:`).
+- **Pull requests**: un cambio coherente por PR, que explique el problema, la solución y cómo se verificó.
+- Antes de abrir un PR, `composer lint` y `composer test` deben pasar.
+
+## Pendientes conocidos
+
+- **Migrar a una versión de Laravel con soporte.** Laravel 9 dejó de recibir parches de seguridad y `composer audit` reporta avisos en `laravel/framework` que no tienen corrección en la rama 9.x.
+- Paginación y búsqueda en los listados.
+- Autorización por roles: hoy cualquier usuario autenticado puede modificar los catálogos.
+
+## Licencia
+
+Distribuido bajo la licencia [MIT](https://opensource.org/licenses/MIT).
