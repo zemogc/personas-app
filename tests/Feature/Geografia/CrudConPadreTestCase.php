@@ -56,6 +56,56 @@ abstract class CrudConPadreTestCase extends TestCase
             ->assertSee($padre->{$this->parentNameColumn()});
     }
 
+    public function test_pagina_el_listado()
+    {
+        config(['geografia.por_pagina' => 5]);
+        $this->model::factory()->count(6)->create();
+
+        $this->get(route("{$this->route}.index"))
+            ->assertOk()
+            ->assertViewHas($this->route, fn ($pagina) => $pagina->count() === 5 && $pagina->total() === 6);
+
+        $this->get(route("{$this->route}.index", ['page' => 2]))
+            ->assertViewHas($this->route, fn ($pagina) => $pagina->count() === 1);
+    }
+
+    public function test_busca_por_nombre_y_conserva_el_termino_en_la_paginacion()
+    {
+        config(['geografia.por_pagina' => 1]);
+        $this->model::factory()->create([$this->nameColumn => 'Zafiro Norte']);
+        $this->model::factory()->create([$this->nameColumn => 'Zafiro Sur']);
+        $this->model::factory()->create([$this->nameColumn => 'Rubí']);
+
+        $this->get(route("{$this->route}.index", ['q' => 'zafiro']))
+            ->assertOk()
+            ->assertViewHas($this->route, fn ($pagina) => $pagina->total() === 2)
+            ->assertSee('q=zafiro', false)
+            ->assertDontSee('Rubí');
+    }
+
+    public function test_busca_por_nombre_del_padre()
+    {
+        $padre = $this->parentModel::factory()->create([$this->parentNameColumn() => 'Quetzal']);
+        $hijo = $this->model::factory()->create([$this->foreignKey => $padre->getKey()]);
+        $this->model::factory()->create();
+
+        $this->get(route("{$this->route}.index", ['q' => 'quetz']))
+            ->assertViewHas($this->route, fn ($pagina) => $pagina->total() === 1 && $pagina->first()->is($hijo));
+    }
+
+    public function test_los_comodines_de_like_se_buscan_literalmente()
+    {
+        $this->model::factory()->create([$this->nameColumn => 'Cien_por_ciento']);
+        $this->model::factory()->create([$this->nameColumn => 'Cienxporxciento']);
+
+        $this->get(route("{$this->route}.index", ['q' => 'cien_']))
+            ->assertViewHas($this->route, fn ($pagina) => $pagina->total() === 1);
+
+        $this->get(route("{$this->route}.index", ['q' => '%']))
+            ->assertViewHas($this->route, fn ($pagina) => $pagina->total() === 0)
+            ->assertSee('No hay resultados para');
+    }
+
     public function test_muestra_los_formularios_con_las_opciones_del_padre()
     {
         $registro = $this->model::factory()->create();
