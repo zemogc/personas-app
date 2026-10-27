@@ -107,4 +107,17 @@ return [
 
     'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Serializable Classes
+    |--------------------------------------------------------------------------
+    |
+    | Clases que pueden deserializarse desde la caché. En false no se permite
+    | ninguna, lo que evita ataques de deserialización (gadget chains) si el
+    | APP_KEY llegara a filtrarse. La aplicación solo guarda valores escalares.
+    |
+    */
+
+    'serializable_classes' => false,
+
 ];
