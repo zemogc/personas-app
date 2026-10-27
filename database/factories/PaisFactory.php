@@ -19,7 +19,9 @@ class PaisFactory extends Factory
     {
         return [
             'pais_codi' => strtoupper($this->faker->unique()->lexify('???')),
-            'pais_nomb' => $this->faker->country(),
+            // tb_pais.pais_nomb es varchar(50) y Faker incluye nombres de 51
+            // caracteres, que MySQL en modo estricto rechaza.
+            'pais_nomb' => mb_substr($this->faker->country(), 0, 50),
         ];
     }
 }
