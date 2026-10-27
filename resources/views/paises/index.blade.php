@@ -13,9 +13,11 @@
                 <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <x-search-form :action="route('paises.index')" placeholder="Buscar por nombre o código" />
 
-                    <a href="{{ route('paises.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
-                        Nuevo país
-                    </a>
+                    @can('gestionar-geografia')
+                        <a href="{{ route('paises.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
+                            Nuevo país
+                        </a>
+                    @endcan
                 </div>
 
                 <div class="overflow-x-auto">
@@ -25,7 +27,9 @@
                                 <th scope="col" class="px-4 py-3">Código</th>
                                 <th scope="col" class="px-4 py-3">País</th>
                                 <th scope="col" class="px-4 py-3">Capital</th>
-                                <th scope="col" class="px-4 py-3 text-right">Acciones</th>
+                                @can('gestionar-geografia')
+                                    <th scope="col" class="px-4 py-3 text-right">Acciones</th>
+                                @endcan
                             </tr>
                         </thead>
                         <tbody class="divide-y">
@@ -34,19 +38,21 @@
                                     <td class="px-4 py-3">{{ $pais->pais_codi }}</td>
                                     <td class="px-4 py-3">{{ $pais->pais_nomb }}</td>
                                     <td class="px-4 py-3">{{ $pais->capital?->muni_nomb ?? '—' }}</td>
-                                    <td class="px-4 py-3 text-right whitespace-nowrap">
-                                        <a href="{{ route('paises.edit', $pais) }}" class="text-indigo-600 hover:text-indigo-900">Editar</a>
-                                        <form action="{{ route('paises.destroy', $pais) }}" method="POST" class="inline"
-                                              onsubmit="return confirm('¿Seguro que desea eliminar este registro?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="ml-3 text-red-600 hover:text-red-900">Eliminar</button>
-                                        </form>
-                                    </td>
+                                    @can('gestionar-geografia')
+                                        <td class="px-4 py-3 text-right whitespace-nowrap">
+                                            <a href="{{ route('paises.edit', $pais) }}" class="text-indigo-600 hover:text-indigo-900">Editar</a>
+                                            <form action="{{ route('paises.destroy', $pais) }}" method="POST" class="inline"
+                                                  onsubmit="return confirm('¿Seguro que desea eliminar este registro?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="ml-3 text-red-600 hover:text-red-900">Eliminar</button>
+                                            </form>
+                                        </td>
+                                    @endcan
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-4 py-6 text-center text-gray-500">
+                                    <td colspan="{{ Gate::allows('gestionar-geografia') ? 4 : 3 }}" class="px-4 py-6 text-center text-gray-500">
                                         {{ request()->filled('q') ? 'No hay resultados para «'.request('q').'».' : 'No hay registros.' }}
                                     </td>
                                 </tr>
