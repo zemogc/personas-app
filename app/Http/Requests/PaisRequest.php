@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
-class PaisRequest extends GeografiaRequest
+class PaisRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
