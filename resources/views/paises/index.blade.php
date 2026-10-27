@@ -10,7 +10,9 @@
             <x-flash />
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <div class="mb-4 flex justify-end">
+                <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <x-search-form :action="route('paises.index')" placeholder="Buscar por nombre o código" />
+
                     <a href="{{ route('paises.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
                         Nuevo país
                     </a>
@@ -44,11 +46,17 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-4 py-6 text-center text-gray-500">No hay registros.</td>
+                                    <td colspan="4" class="px-4 py-6 text-center text-gray-500">
+                                        {{ request()->filled('q') ? 'No hay resultados para «'.request('q').'».' : 'No hay registros.' }}
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+
+                <div class="mt-4">
+                    {{ $paises->links() }}
                 </div>
             </div>
         </div>
