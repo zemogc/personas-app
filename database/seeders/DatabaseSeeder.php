@@ -14,9 +14,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()->create([
+        User::factory()->admin()->create([
             'name' => 'Usuario Demo',
             'email' => 'demo@example.com',
+        ]);
+
+        User::factory()->create([
+            'name' => 'Lector Demo',
+            'email' => 'lector@example.com',
         ]);
 
         $this->call(GeografiaSeeder::class);
