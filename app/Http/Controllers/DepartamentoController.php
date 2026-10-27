@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\DepartamentoRequest;
 use App\Models\Departamento;
 use App\Models\Pais;
+use Illuminate\Http\Request;
 
 class DepartamentoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $departamentos = Departamento::with('pais')->orderBy('depa_nomb')->get();
+        $departamentos = Departamento::with('pais')
+            ->buscar($request->query('q'))
+            ->orderBy('depa_nomb')
+            ->paginate(config('geografia.por_pagina'))
+            ->withQueryString();
 
         return view('departamentos.index', compact('departamentos'));
     }

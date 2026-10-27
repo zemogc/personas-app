@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Buscable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Pais extends Model
 {
-    use HasFactory;
+    use Buscable, HasFactory;
 
     protected $table = 'tb_pais';
 
@@ -18,6 +19,9 @@ class Pais extends Model
     public $incrementing = false;
 
     public $timestamps = false;
+
+    /** @var string[] Columnas usadas por el scope buscar(). */
+    protected array $buscable = ['pais_nomb', 'pais_codi'];
 
     protected $fillable = ['pais_codi', 'pais_nomb', 'pais_capi'];
 

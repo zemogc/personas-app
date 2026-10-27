@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MunicipioRequest;
 use App\Models\Departamento;
 use App\Models\Municipio;
+use Illuminate\Http\Request;
 
 class MunicipioController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $municipios = Municipio::with('departamento')->orderBy('muni_nomb')->get();
+        $municipios = Municipio::with('departamento')
+            ->buscar($request->query('q'))
+            ->orderBy('muni_nomb')
+            ->paginate(config('geografia.por_pagina'))
+            ->withQueryString();
 
         return view('municipios.index', compact('municipios'));
     }
