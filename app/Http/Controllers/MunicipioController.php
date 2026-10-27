@@ -2,84 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Municipio; // Importar el modelo Municipio
-
+use App\Http\Requests\MunicipioRequest;
+use App\Models\Departamento;
+use App\Models\Municipio;
 
 class MunicipioController extends Controller
 {
     public function index()
     {
-        $municipios = Municipio::all();
+        $municipios = Municipio::with('departamento')->orderBy('muni_nomb')->get();
+
         return view('municipios.index', compact('municipios'));
     }
 
     public function create()
     {
-       
-        $municipios = Municipio::all();
-        return view('municipios.new', compact('municipios'));
+        return view('municipios.new', ['departamentos' => $this->departamentos()]);
     }
 
-    public function store(Request $request)
+    public function store(MunicipioRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'muni_codi' => 'required|exists:tb_municipio,muni_codi'
-        ]);
-        
-        $municipio = new Municipio();
-        $municipio->muni_nomb = $request->name;
-        $municipio->muni_codi = $request->muni_codi;
-        $municipio->depa_codi = 10; 
-        
-        $municipio->save();
-    
-        return redirect()->route('municipios.index')->with('success', 'Municipio creado correctamente');
-    }
+        Municipio::create($request->validated());
 
-    public function show(Municipio $municipio)
-    {
-        return view('municipios.show', compact('municipio'));
+        return redirect()->route('municipios.index')->with('success', 'Municipio creado correctamente.');
     }
 
     public function edit(Municipio $municipio)
     {
-        return view('municipios.edit', compact('municipio'));
+        return view('municipios.edit', ['municipio' => $municipio, 'departamentos' => $this->departamentos()]);
     }
 
-    public function update(Request $request, Municipio $municipio)
+    public function update(MunicipioRequest $request, Municipio $municipio)
     {
-        // configuo la actualizacion ya que va de la mano con el edit de arriba
-        // datos y vaidaciones
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'code' => 'required|exists:tb_municipio,muni_codi'
-        ]);
+        $municipio->update($request->validated());
 
-        // actualizacion
-        $municipio->update([
-            'muni_nomb' => $request->name,
-            'muni_codi' => $request->code
-        ]);
-
-        // mensaje de aactualizado con éxito
-        return redirect()->route('municipios.index')->with('success', 'Municipio actualizado correctamente');
-    
+        return redirect()->route('municipios.index')->with('success', 'Municipio actualizado correctamente.');
     }
 
     public function destroy(Municipio $municipio)
     {
-  // Verificar si el municipio existe en bd
-  if ($municipio) {
-    // Eliminar el municipio de la base de datos
-    $municipio->delete();
+        if ($municipio->comunas()->exists()) {
+            return redirect()->route('municipios.index')
+                ->with('error', 'No se puede eliminar el municipio porque tiene comunas asociados.');
+        }
 
-    // Redirigir de vuelta a la vista index con un mensaje de éxito
-    return redirect()->route('municipios.index')->with('success', 'Municipio eliminado correctamente');
-} else {
-    // Si el municipio no existe, redirigir con un mensaje de error
-    return redirect()->route('municipios.index')->with('error', 'El municipio no existe o ya ha sido eliminado');
-}
+        $municipio->delete();
+
+        return redirect()->route('municipios.index')->with('success', 'Municipio eliminado correctamente.');
+    }
+
+    private function departamentos()
+    {
+        return Departamento::orderBy('depa_nomb')->get();
     }
 }

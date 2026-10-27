@@ -1,47 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Municipios
+        </h2>
+    </x-slot>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <x-flash />
 
-    <title>Listado de Municipios</title>
-</head>
-<body>
-    <div class="container">
-        <h1>Listado de Municipios</h1>
-        <a href="{{ route('municipios.create') }}" class="btn btn-success">Crear Municipio</a>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">Código</th>
-                    <th scope="col">Municipio</th>
-                    <th scope="col">Departamento</th> 
-                    <th scope="col">Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($municipios as $municipio)
-                <tr>
-                    <th scope="row">{{ $municipio->muni_codi }}</th>
-                    <td>{{ $municipio->muni_nomb }}</td>
-                    <td>{{ $municipio->depa_codi }}</td> 
-                    <td>
-                        <a href="{{ route('municipios.edit', ['municipio'=>$municipio->muni_codi]) }}" class="btn btn-info">Editar</a>
-                        <form action="{{ route('municipios.destroy', ['municipio' => $municipio->muni_codi]) }}" method="POST" style="display: inline-block">
-                            @method('delete')
-                            @csrf
-                            <button class="btn btn-danger" type="submit">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <div class="mb-4 flex justify-end">
+                    <a href="{{ route('municipios.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
+                        Nuevo municipio
+                    </a>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-left text-sm text-gray-700">
+                        <thead class="border-b bg-gray-50 text-xs uppercase text-gray-500">
+                            <tr>
+                                <th scope="col" class="px-4 py-3">Código</th>
+                                <th scope="col" class="px-4 py-3">Municipio</th>
+                                <th scope="col" class="px-4 py-3">Departamento</th>
+                                <th scope="col" class="px-4 py-3 text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            @forelse ($municipios as $municipio)
+                                <tr>
+                                    <td class="px-4 py-3">{{ $municipio->muni_codi }}</td>
+                                    <td class="px-4 py-3">{{ $municipio->muni_nomb }}</td>
+                                    <td class="px-4 py-3">{{ $municipio->departamento->depa_nomb }}</td>
+                                    <td class="px-4 py-3 text-right whitespace-nowrap">
+                                        <a href="{{ route('municipios.edit', $municipio) }}" class="text-indigo-600 hover:text-indigo-900">Editar</a>
+                                        <form action="{{ route('municipios.destroy', $municipio) }}" method="POST" class="inline"
+                                              onsubmit="return confirm('¿Seguro que desea eliminar este registro?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="ml-3 text-red-600 hover:text-red-900">Eliminar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-4 py-6 text-center text-gray-500">No hay registros.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-</body>
-</html>
-
+</x-app-layout>

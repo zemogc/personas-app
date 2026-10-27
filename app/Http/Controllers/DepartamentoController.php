@@ -2,63 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\DepartamentoRequest;
 use App\Models\Departamento;
-
+use App\Models\Pais;
 
 class DepartamentoController extends Controller
 {
     public function index()
     {
-        $departamentos = Departamento::all();
+        $departamentos = Departamento::with('pais')->orderBy('depa_nomb')->get();
+
         return view('departamentos.index', compact('departamentos'));
     }
+
     public function create()
     {
-        return view('departamentos.new');
+        return view('departamentos.new', ['paises' => $this->paises()]);
     }
 
-    public function store(Request $request)
+    public function store(DepartamentoRequest $request)
     {
-       // Validación
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'country_code' => 'required|string|max:255', 
-    ]);
+        Departamento::create($request->validated());
 
-    // Crearenbd
-    Departamento::create([
-        'depa_nomb' => $request->name,
-        'pais_codi' => $request->country_code,
-    ]);
-
-    return redirect()->route('departamentos.index')->with('success', 'Departamento creado correctamente');
+        return redirect()->route('departamentos.index')->with('success', 'Departamento creado correctamente.');
     }
 
     public function edit(Departamento $departamento)
     {
-        return view('departamentos.edit', compact('departamento'));
+        return view('departamentos.edit', ['departamento' => $departamento, 'paises' => $this->paises()]);
     }
 
-    public function update(Request $request, Departamento $departamento)
+    public function update(DepartamentoRequest $request, Departamento $departamento)
     {
-        $request->validate([
-            'depa_nomb' => 'required|string|max:255',
-            'pais_codi' => 'required|exists:tb_pais,pais_codi'
-        ]);
-    
-        $departamento->update([
-            'depa_nomb' => $request->depa_nomb,
-            'pais_codi' => $request->pais_codi
-        ]);
-    
-        return redirect()->route('departamentos.index')->with('success', 'Departamento actualizado correctamente');
+        $departamento->update($request->validated());
+
+        return redirect()->route('departamentos.index')->with('success', 'Departamento actualizado correctamente.');
     }
-    
 
     public function destroy(Departamento $departamento)
     {
+        if ($departamento->municipios()->exists()) {
+            return redirect()->route('departamentos.index')
+                ->with('error', 'No se puede eliminar el departamento porque tiene municipios asociados.');
+        }
+
         $departamento->delete();
-        return redirect()->route('departamentos.index')->with('success', 'Departamento eliminado correctamente');
+
+        return redirect()->route('departamentos.index')->with('success', 'Departamento eliminado correctamente.');
+    }
+
+    private function paises()
+    {
+        return Pais::orderBy('pais_nomb')->get();
     }
 }

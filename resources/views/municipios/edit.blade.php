@@ -1,32 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Municipio</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <h1>Editar Municipio</h1>
-        <form method="POST" action="{{ route('municipios.update', ['municipio' => $municipio->muni_codi]) }}">
-        @method('put')
-    @csrf
-            <div class="mb-3">
-            <label for="name" class="form-label">Nombre del Municipio</label>
-    <input type="text" class="form-control" id="name" name="name" value="{{ $municipio->muni_nomb }}">
-        </div>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Editar municipio
+        </h2>
+    </x-slot>
 
-        <div class="mb-3">
-                <label for="code" class="form-label">Código del Municipio</label>
-                <input type="text" class="form-control" id="code" name="code" value="{{ $municipio->muni_codi }}">
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 max-w-xl">
+                <form method="POST" action="{{ route('municipios.update', $municipio) }}" class="space-y-6">
+                    @csrf
+                    @method('PUT')
+
+                    @include('municipios._form', ['municipio' => $municipio])
+                </form>
             </div>
-
-
-            <button type="submit" class="btn btn-primary">Actualizar</button>
-            <a href="{{ route('municipios.index') }}" class="btn btn-secondary">Cancelar</a>
-        </form>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</x-app-layout>
