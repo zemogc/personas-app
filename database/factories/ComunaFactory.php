@@ -2,11 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Comuna;
 use App\Models\Municipio;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Comuna>
+ * @extends Factory<Comuna>
  */
 class ComunaFactory extends Factory
 {
