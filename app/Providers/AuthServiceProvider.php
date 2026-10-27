@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Un único permiso para los cuatro catálogos: todos comparten las mismas reglas.
+        Gate::define('gestionar-geografia', fn (User $user) => $user->esAdmin());
     }
 }

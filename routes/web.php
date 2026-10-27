@@ -31,13 +31,24 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Laravel singulariza "paises" como "paise"; se fija el parámetro a {pais}.
-    Route::resource('paises', PaisController::class)
-        ->parameters(['paises' => 'pais'])
-        ->except('show');
-    Route::resource('departamentos', DepartamentoController::class)->except('show');
-    Route::resource('municipios', MunicipioController::class)->except('show');
-    Route::resource('comunas', ComunaController::class)->except('show');
+    $geografia = [
+        'paises' => PaisController::class,
+        'departamentos' => DepartamentoController::class,
+        'municipios' => MunicipioController::class,
+        'comunas' => ComunaController::class,
+    ];
+
+    foreach ($geografia as $recurso => $controlador) {
+        // Laravel singulariza "paises" como "paise"; se fija el parámetro a {pais}.
+        Route::resource($recurso, $controlador)
+            ->parameters(['paises' => 'pais'])
+            ->only('index');
+
+        Route::resource($recurso, $controlador)
+            ->parameters(['paises' => 'pais'])
+            ->except(['index', 'show'])
+            ->middleware('can:gestionar-geografia');
+    }
 });
 
 require __DIR__.'/auth.php';

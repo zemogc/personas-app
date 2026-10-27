@@ -17,7 +17,7 @@ class PaisTest extends TestCase
     {
         parent::setUp();
 
-        $this->actingAs(User::factory()->create());
+        $this->actingAs(User::factory()->admin()->create());
     }
 
     public function test_lista_los_paises_con_su_capital()

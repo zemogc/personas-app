@@ -8,7 +8,8 @@ Proyecto académico desarrollado como práctica de Laravel (MVC, Eloquent, Blade
 ## Funcionalidades
 
 - Registro, inicio de sesión, verificación de correo y perfil de usuario (Laravel Breeze).
-- CRUD completo de países, departamentos, municipios y comunas, disponible solo para usuarios autenticados.
+- CRUD completo de países, departamentos, municipios y comunas, con búsqueda y paginación.
+- Roles: los **administradores** gestionan los catálogos; los **lectores** solo los consultan. Todo usuario nuevo se registra como lector.
 - Validación con Form Requests y mensajes en español.
 - Integridad referencial: no se puede eliminar un registro que tiene dependientes (p. ej. un país con departamentos).
 - Datos de ejemplo de Colombia listos para usar.
@@ -82,11 +83,12 @@ npm run build                # o `npm run dev` mientras desarrollas
 php artisan serve
 ```
 
-Abre <http://localhost:8000> e inicia sesión con el usuario de ejemplo:
+Abre <http://localhost:8000> e inicia sesión con uno de los usuarios de ejemplo:
 
-| Correo | Contraseña |
-|---|---|
-| `demo@example.com` | `password` |
+| Correo | Contraseña | Rol |
+|---|---|---|
+| `demo@example.com` | `password` | Administrador |
+| `lector@example.com` | `password` | Lector |
 
 ## Comandos útiles
 
@@ -96,6 +98,7 @@ Abre <http://localhost:8000> e inicia sesión con el usuario de ejemplo:
 | `composer lint` | Revisa el estilo de código con Pint sin modificar archivos |
 | `composer format` | Corrige el estilo de código con Pint |
 | `php artisan migrate:fresh --seed` | Reconstruye la base de datos con los datos de ejemplo |
+| `php artisan usuario:rol <correo> admin` | Convierte a un usuario en administrador (`lector` para revertirlo) |
 | `npm run dev` | Servidor de Vite con recarga en caliente |
 
 ## Estructura relevante
@@ -127,8 +130,6 @@ tests/Feature/Geografia/    Tests del CRUD (CrudConPadreTestCase + un test por r
 ## Pendientes conocidos
 
 - Adoptar la estructura simplificada de Laravel 11+ (`bootstrap/app.php` con `withRouting`/`withMiddleware`). Hoy se conserva la estructura clásica (`Http/Kernel`, providers en `config/app.php`), que Laravel sigue soportando.
-- Paginación y búsqueda en los listados.
-- Autorización por roles: hoy cualquier usuario autenticado puede modificar los catálogos.
 
 ## Licencia
 
