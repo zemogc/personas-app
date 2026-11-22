@@ -48,7 +48,7 @@ class MunicipioController extends Controller
     {
         if ($municipio->comunas()->exists()) {
             return redirect()->route('municipios.index')
-                ->with('error', 'No se puede eliminar el municipio porque tiene comunas asociados.');
+                ->with('error', 'No se puede eliminar el municipio porque tiene comunas asociadas.');
         }
 
         $municipio->delete();
